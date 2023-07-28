@@ -6,8 +6,8 @@ its not suited for production use
 ## 📸 Screenshot
 ![screenshot1](https://github.com/pemn/assets/blob/main/bm_geostat_process1.png?raw=true)
 ## 🧩 Implementation
-The main implementation is a windows batch script that calls the tools for each step.  
-It can be easily ported to other platforms since the tools themselves inherity the portability of Python.  
+The main implementation is a windows batch script that calls secondary processes for each step.  
+It can be easily ported to other platforms since the provided tools inherit the portability of Python.  
 This geostatistics estimation process consists of the following steps:
  1. Data and parameter input
  2. Hole desurvey
@@ -18,7 +18,7 @@ This geostatistics estimation process consists of the following steps:
  7. Validity checks
  8. Reserve estimation
 ## 📦 Installation
-In case you dont have any python distribution already, the recomended distribution is [Winpython](https://winpython.github.io/) 3.11+.  
+In case a python distribution is not already available, the recomended distribution is [Winpython](https://winpython.github.io/) 3.11+.  
 Download the installer from the link above.  
 Extract into this windows special folder:  
 `%APPDATA%`
@@ -30,6 +30,7 @@ Windows blocks executables in protected folders (and subfolders) such as:
  - Downloads
  - Documents
  - OneDrive Synced folders
+
 Also, its not recomended to use the winpython install folder to save this script.  
 So you may need to create a new valid folder directly in the C: drive. Ex.:  
 `c:\scripts\geostat`
