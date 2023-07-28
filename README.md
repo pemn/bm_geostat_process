@@ -1,10 +1,12 @@
 ## 📌 Description
 full open source workflow for generating a geostatistics block model  
 this script integrates multiple generic tools and modules in a single graphical desktop application  
-the target audience is academic use by geostatistic professionals or proof of concepts  
+the target audience is academic use by geostatistic professionals or industrial proof of concepts projects  
 its not suited for production use  
 ## 📸 Screenshot
 ![screenshot1](https://github.com/pemn/assets/blob/main/bm_geostat_process1.png?raw=true)
+## 🧩 Implementation
+WIP
 ## 📝 Parameters
 name|optional|description
 ---|---|------
@@ -12,12 +14,6 @@ name|optional|description
 ||☑️||
 ## 📓 Notes
 ## 📚 Examples
-## 🧩 Compatibility
-distribution|status
----|---
-![winpython_icon](https://github.com/pemn/assets/blob/main/winpython_icon.png?raw=true)|✔
-![vulcan_icon](https://github.com/pemn/assets/blob/main/vulcan_icon.png?raw=true)|❓
-![anaconda_icon](https://github.com/pemn/assets/blob/main/anaconda_icon.png?raw=true)|❌
 ## 🙋 Support
 Any question or problem contact:
  - paulo.ernesto
