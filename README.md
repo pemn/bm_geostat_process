@@ -4,7 +4,7 @@ this script integrates multiple generic tools and modules in a single graphical 
 the target audience is academic use by geostatistic professionals or proof of concepts  
 its not suited for production use  
 ## 📸 Screenshot
-![screenshot1](https://github.com/pemn/assets/blob/main/bm_geostat_process1.png?raw=true))
+![screenshot1](https://github.com/pemn/assets/blob/main/bm_geostat_process1.png?raw=true)
 ## 📝 Parameters
 name|optional|description
 ---|---|------
