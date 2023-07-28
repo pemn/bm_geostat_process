@@ -8,6 +8,15 @@ its not suited for production use
 ## 🧩 Implementation
 The main implementation is a windows batch script that calls the tools for each step.  
 It can be easily ported to other platforms since the tools themselves inherity the portability of Python.  
+This geostatistics estimation process consists of the following steps:
+ 1. Data and parameter input
+ 2. Hole desurvey
+ 3. Grid creation
+ 4. Flag solids
+ 5. Multivariate grade estimation
+ 6. Postprocessing
+ 7. Validity checks
+ 8. Reserve estimation
 ## 📦 Installation
 In case you dont have any python distribution already, the recomended distribution is [Winpython](https://winpython.github.io/) 3.11+.  
 Download the installer from the link above.  
