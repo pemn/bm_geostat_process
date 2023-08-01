@@ -7,7 +7,7 @@ if "%~1" equ "" (
         if defined WINPYDIRBASE call "!WINPYDIRBASE!\scripts\env.bat"
         python -m _gui %0
     ) else (
-        echo usage: %~nx0 db_header*csv db_survey*csv db_assay*csv variables#variable:db_assay lito_mesh#mesh*vtk output_grid*vtk output_reserves*csv
+        echo usage: %~nx0 lito_mesh#mesh*vtk db_header*csv db_survey*csv db_assay*csv variables#variable:db_assay output_grid*vtk output_reserves*csv
         timeout 60
     )
     goto :EOF
@@ -19,11 +19,11 @@ set grid_size=50
 set lito=lito
 
 :: user parameters
-set db_header=%1
-set db_survey=%2
-set db_assay=%3
-set variables=%4
-set lito_mesh=%5
+set lito_mesh=%1
+set db_header=%2
+set db_survey=%3
+set db_assay=%4
+set variables=%5
 set output_grid=%6
 set output_reserves=%7
 set pid=%random%
