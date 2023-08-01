@@ -28,7 +28,6 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.messagebox as messagebox
 import tkinter.filedialog as filedialog
-from PIL import Image, ImageDraw
 
 
 # fix for wrong path of pythoncomXX.dll in vulcan 10.1.5
@@ -1600,7 +1599,7 @@ class smartfilelist(object):
         elif input_ext == ".msh" and s == 0:
           r = smartfilelist.default_columns + ['closed','node']
         elif input_ext == ".csv":
-          df = pd.read_csv(df_path, None, engine='python', encoding='latin_1', nrows=s == 0 and 1 or None)
+          df = pd.read_csv(df_path, sep=None, engine='python', encoding='latin_1', nrows=s == 0 and 1 or None)
           if s == 0:
             r = df.columns.tolist()
           if s == 1:
@@ -2442,6 +2441,7 @@ class AppTk(tk.Tk):
 class Branding(object):
   _gc = []
   def __init__(self, f='ICO', size=None):
+    from PIL import Image, ImageDraw
     self._format = f
     
     self._image = Image.new('RGBA', (800, 800))
