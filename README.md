@@ -7,21 +7,22 @@ its not suited for production use
 ![screenshot1](https://github.com/pemn/assets/blob/main/bm_geostat_process1.png?raw=true)
 ## 🧩 Implementation
 The main implementation is a windows batch script that calls secondary processes for each step.  
-It can be easily ported to other platforms since the provided tools inherit the portability of Python.  
+It can be adapted to run in other platforms since the provided tools inherit the portability of Python.  
 This geostatistics estimation process consists of the following steps:
  1. Data and parameter input
  2. Hole desurvey
- 3. Grid creation
- 4. Flag solids
- 5. Multivariate grade estimation
- 6. Postprocessing
- 7. Validity checks
- 8. Reserve estimation
+ 3. Sample database postprocess
+ 4. Grid creation
+ 5. Flag lito solids
+ 6. Multivariate grade estimation
+ 7. Estimation Postprocess
+ 8. QA checks
+ 9. Reserve Report
 ## 📦 Installation
 In case a python distribution is not already available, the recomended distribution is [Winpython](https://winpython.github.io/) 3.11+.  
 Download the installer from the link above.  
 Extract into this windows special folder:  
-`%APPDATA%`
+`%APPDATA%`  
 The correct path to the python executable should be similar to this example:  
 `C:\Users\user\AppData\Roaming\WPy64-31131\python-3.11.3.amd64\python.exe`  
 Download this entire repository as zip and extract to a valid folder.  
