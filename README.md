@@ -13,7 +13,7 @@ This geostatistics estimation process consists of the following steps:
  2. Hole desurvey
  3. Sample database postprocess
  4. Grid creation
- 5. Flag lito solids
+ 5. Flag litho solids
  6. Multivariate grade estimation
  7. Estimation Postprocess
  8. QA checks
@@ -55,5 +55,5 @@ output_reserves*csv|❎|path to save the reserves report in csv format
 Any question or problem contact:
  - paulo.ernesto
 ## 💎 License
-Apache 2.0
+Apache 2.0  
 Copyright ![vale_logo_only](https://github.com/pemn/assets/blob/main/vale_logo_only_r.svg?raw=true) Vale 2023
