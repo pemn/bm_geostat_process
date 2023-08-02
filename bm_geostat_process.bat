@@ -27,6 +27,7 @@ powershell -c "$env0 = -split '%env0%'; get-childitem env: | ? Name -notin $env0
 :: ## hardcoded parameters
 set grid_size=50
 set lito=lito
+set density=density
 set pid=%random%
 set tmp_csv=%~n0.%pid%.csv
 set tmp_vtk=%~n0.%pid%.vtk
@@ -52,18 +53,23 @@ python db_linear_model.py "%tmp_vtk%" "" "%tmp_csv%" "" "" "" "%variables%" rn "
 python vtk_evaluate_array.py "%tmp_vtk%" "lito = np.vectorize(lambda _: _.rpartition('_')[2])(lito)"
 
 :: ### calculate density from lito
-python vtk_evaluate_array.py "%tmp_vtk%" "density = np.choose(((lito == 'AA') * 1) + ((lito == 'BB') * 2) + ((lito == 'CC') * 3) + ((lito == 'DD') * 4), (np.nan, 1, 2, 3, 4))"
+python vtk_evaluate_array.py "%tmp_vtk%" "%density% = np.choose(((lito == 'AA') * 1) + ((lito == 'BB') * 2) + ((lito == 'CC') * 3) + ((lito == 'DD') * 4), (np.nan, 1, 2, 3, 4))"
 
 :: ### cleanup
 move /y "%tmp_vtk%" "%output_grid%"
 if exist %tmp_csv% del %tmp_csv%
 
-:: ## checks
+:: ## checks and statistics
 
 :: ## reports
 
 :: ### grid details
 python db_info.py "%output_grid%" 0
 
+:: ### variable statistics
+python bm_fivenum_weight.py "%output_grid%" "" %lito% "" "%density%;%variables%" "" 0
+
 :: ### reserves estimation
 python vtk_reserves.py "%output_grid%" "%lito%,,;volume,sum;volume=mass,sum,density" "" "" "" "%output_reserves%" 0
+
+if exist "%output_reserves%" type "%output_reserves%" 
