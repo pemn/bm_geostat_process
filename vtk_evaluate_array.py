@@ -24,6 +24,7 @@ class DSLSUB(object):
       code = open(code).read()
 
     s = re.sub(r'([a-z_]\w{1,})(\s+=\s+)?', self.sub, code)
+    print(s)
     exec(s)
 
   def sub(self, m):
@@ -50,7 +51,6 @@ def DSLSUB_new(input_path):
 def vtk_evaluate_array(input_path, input_code, output = None):
   dsl = DSLSUB_new(input_path)
   dsl(input_code)
-  print(dsl)
   if not output:
     output = input_path
   dsl.save(output)

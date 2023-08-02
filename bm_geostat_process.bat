@@ -1,3 +1,7 @@
+:: full open source workflow for generating a geostatistics block model
+:: License Apache 2.0
+:: https://github.com/pemn/bm_geostat_process
+
 @echo off
 setlocal enabledelayedexpansion
 :: main code
@@ -63,6 +67,6 @@ if exist %tmp_csv% del %tmp_csv%
 python db_info.py "%output_grid%" 0
 
 :: ## reserves estimation
-python vtk_reserves.py "%output_grid%" "%lito%,,;volume,sum" "" "" "" "%output_reserves%" 0
+python vtk_reserves.py "%output_grid%" "%lito%,,;volume,sum;volume=mass,sum,density" "" "" "" "%output_reserves%" 0
 
 echo finished
