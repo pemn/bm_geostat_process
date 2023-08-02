@@ -35,7 +35,7 @@ from _gui import usage_gui, pyd_zip_extract, commalist, pd_save_dataframe, log
 
 import numpy as np
 import pandas as pd
-from pd_vtk import vtk_Voxel, pv_read, vtk_plot_meshes
+from pd_vtk import vtk_Voxel, pv_read, vtk_plot_meshes, vtk_mesh_info, vtk_mesh_to_df
 from vtk_mine import GridMine
 from vtk_flag_regions import vtk_flag_region
 from bm_breakdown import pd_breakdown
@@ -45,7 +45,7 @@ def pd_grid_depletion(block_model, regions, mine_include, mine_exclude):
   ''' create raw dataframe with the reserves data '''
   meshes = []
   grid = vtk_Voxel.from_file_path(block_model)
-  
+
   if 'volume' not in grid.array_names:
     grid.cells_volume('volume')
 
@@ -79,8 +79,10 @@ def pd_grid_depletion(block_model, regions, mine_include, mine_exclude):
   
   meshes.append(grid)
 
-  df = pd.DataFrame(np.transpose(grid.cell_data.values()), columns=grid.cell_data)
-
+  #df = pd.DataFrame(np.transpose(grid.cell_data.values()), columns=grid.cell_data)
+  
+  df = vtk_mesh_to_df(grid)
+  print(df.describe())
   if len(r_meshes):
     # exclude rows where region is empty
     df = df.query("region != ''")
@@ -116,7 +118,6 @@ def vtk_reserves(block_model, variables, regions, mine_include, mine_exclude, ou
   # load the grid, meshes
   # flag region and mine
   idf, meshes = pd_grid_depletion(block_model, regions.split(";"), commalist().parse(mine_include).split(), commalist().parse(mine_exclude).split())
-
   #idf.mask(idf == -99, inplace=True)
   # calculate the reserves using the grid dataframe
   odf = pd_breakdown(idf, vl)

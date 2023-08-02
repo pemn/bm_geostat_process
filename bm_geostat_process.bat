@@ -70,6 +70,8 @@ python db_info.py "%output_grid%" 0
 python bm_fivenum_weight.py "%output_grid%" "" %lito% "" "%density%;%variables%" "" 0
 
 :: ### reserves estimation
-python vtk_reserves.py "%output_grid%" "%lito%,,;volume,sum;volume=mass,sum,density" "" "" "" "%output_reserves%" 0
+set vl=%lito%;volume,sum;volume=mass,sum,density
+for %%v in (%variables%) do set vl=!vl!;%%v,mean,density
+python vtk_reserves.py "%output_grid%" "%vl%" "" "" "" "%output_reserves%" 0
 
 if exist "%output_reserves%" type "%output_reserves%" 
