@@ -1,6 +1,6 @@
 @echo off
 setlocal enabledelayedexpansion
-echo * %*
+:: main code
 if "%~1" equ "" (
     if exist _gui.py (
         if not defined WINPYDIRBASE for /d %%i in (%appdata%\WPy64*) do set WINPYDIRBASE=%%i
@@ -12,20 +12,18 @@ if "%~1" equ "" (
     )
     goto :EOF
 )
-:: main code
+:: create variables with same name as each usage: symbol
+:: and the corresponding command line parameter as value
+powershell -c "$v = -split '%*'; $k = (-split (select-string %0 -pattern '^\s+echo usage:') | select -skip 4 ) -replace '\W.+',''; foreach ($i in 0..($k.Count-1)) { '{0},{1}' -f $k[$i],$v[$i] }" > %temp%\%~n0.txt
+for /f "delims=, tokens=1,*" %%i in (%temp%\%~n0.txt) do set %%i=%%j
+if exist %temp%\%~n0.txt del %temp%\%~n0.txt
+echo lito_mesh=%lito_mesh% db_header=%db_header% db_survey=%db_survey% db_assay=%db_assay% variables=%variables% output_grid=%output_grid% output_reserves=%output_reserves%
 
 :: hardcoded parameters
 set grid_size=50
 set lito=lito
 
 :: user parameters
-set lito_mesh=%1
-set db_header=%2
-set db_survey=%3
-set db_assay=%4
-set variables=%5
-set output_grid=%6
-set output_reserves=%7
 set pid=%random%
 set tmp_csv=%~n0.%pid%.csv
 set tmp_vtk=%~n0.%pid%.vtk
@@ -51,7 +49,7 @@ python db_linear_model.py "%tmp_vtk%" "" "%tmp_csv%" "" "" "" "%variables%" rn "
 python vtk_evaluate_array.py "%tmp_vtk%" "lito = np.vectorize(lambda _: _.rpartition('_')[2])(lito)"
 
 :: ## calculate density from lito
-python vtk_evaluate_array.py "%tmp_vtk%" "density = np.choose(((lito == 'BB') * 1) + ((lito == 'CC') * 2), (1, 2, 3))"
+python vtk_evaluate_array.py "%tmp_vtk%" "density = np.choose(((lito == 'AA') * 1) + ((lito == 'BB') * 2) + ((lito == 'CC') * 3) + ((lito == 'DD') * 4), (np.nan, 1, 2, 3, 4))"
 
 :: ## cleanup
 move /y "%tmp_vtk%" "%output_grid%"
