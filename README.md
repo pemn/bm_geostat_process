@@ -39,12 +39,12 @@ So you may need to create a new valid folder directly in the C: drive. Ex.:
 name|optional|description
 ---|---|------
 lito_mesh|❎|zero or more solid meshes defining the lithology volumes
-db_header*csv|❎|header of hole database in csv format (x,y,z)
-db_survey*csv|❎|survey of hole database in csv format (azimuth, dip)
-db_assay*csv|❎|assay of hole database in csv format (from, to)
-variables#variable:db_assay|❎|select which fields will be estimated as grades
-output_grid*vtk|❎|path to save the block model in vtk format
-output_reserves*csv|❎|path to save the reserves report in csv format
+db_header|❎|header of hole database in csv format (x,y,z)
+db_survey|❎|survey of hole database in csv format (azimuth, dip)
+db_assay|❎|assay of hole database in csv format (from, to)
+variables|❎|select which fields will be estimated as grades
+output_grid|❎|path to save the block model in vtk format
+output_reserves|❎|path to save the reserves report in csv format
 ## 📓 Notes
 ## 📚 Examples
 ### output 3d grid
