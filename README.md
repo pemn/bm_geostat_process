@@ -38,7 +38,7 @@ So you may need to create a new valid folder directly in the C: drive. Ex.:
 ## 📝 Parameters
 name|optional|description
 ---|---|------
-lito_mesh|❎|zero or more solid meshes defining the lithology volumes
+lito_mesh|❎|zero or more vtk format solid meshes defining the lithology volumes
 db_header|❎|header of hole database in csv format (x,y,z)
 db_survey|❎|survey of hole database in csv format (azimuth, dip)
 db_assay|❎|assay of hole database in csv format (from, to)
