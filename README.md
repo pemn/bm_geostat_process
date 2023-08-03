@@ -10,7 +10,7 @@ The main implementation is a windows batch script that calls secondary processes
 It can be adapted to run in other platforms since the provided tools inherit the portability of Python.  
 This geostatistics estimation process consists of the following steps:
  1. Data and parameter input
- 2. Hole desurvey
+ 2. Hole desurvey (runlength)
  3. Sample database postprocess
  4. Grid creation
  5. Flag litho solids
