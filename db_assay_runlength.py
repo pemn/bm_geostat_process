@@ -39,13 +39,15 @@ def db_assay_runlength(assay, vfrom, vto, vlength, runlength, output):
       if vlength:
         rd[vlength] = runlength
       t0 += runlength
-      odf = odf.append(rd)
+      #odf = odf.append(rd, ignore_index=True)
+      odf = pd.concat((odf, rd.to_frame().T), ignore_index=True, copy=False)
 
     rd[vfrom] = t0
     rd[vto] = t1
     if vlength:
       rd[vlength] = t1 - t0
-    odf = odf.append(rd)
+    #odf = odf.append(rd, ignore_index=True)
+    odf = pd.concat((odf, rd.to_frame().T), ignore_index=True, copy=False)
 
   if output:
     pd_save_dataframe(odf, output)
