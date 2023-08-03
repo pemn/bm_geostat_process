@@ -124,11 +124,11 @@ def pv_save(meshes, fp, binary=True):
   elif not isinstance(meshes, list):
     pv_save([meshes], fp, binary)
   elif len(meshes):
-    if sys.hexversion >= 0x3080000:
-      for mesh in meshes:
-        for k,v in mesh.textures.items():
-            img = vtk_texture_to_array(v)
-            mesh.field_data[str(k)] = np.reshape(img, (img.shape[0],-1))
+    #if sys.hexversion >= 0x3080000:
+    #  for mesh in meshes:
+    #    for k,v in mesh.textures.items():
+    #        img = vtk_texture_to_array(v)
+    #        mesh.field_data[str(k)] = np.reshape(img, (img.shape[0],-1))
 
     mesh = meshes[0]
     if len(meshes) > 1:
