@@ -13,7 +13,7 @@ from _gui import usage_gui, commalist, log, bm_sanitize_condition, pd_load_dataf
 import numpy as np
 import pandas as pd
 
-from db_pk_krig3d import PK
+from pykrige_pk import PK
 
 def vulcan_pk_krig3d(soft_data, soft_condition, soft_lito, df_hard, hard_lito, x, y, z, variables, pk):
   import vulcan
