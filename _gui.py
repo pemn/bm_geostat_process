@@ -349,7 +349,7 @@ def pd_save_dataframe(df, df_path, sheet_name='Sheet1'):
       pd_flat_columns(df)
     if isinstance(df_path, pd.ExcelWriter) or df_path.lower().endswith('.xlsx'):
       # multiple excel sheets mode
-      df.to_excel(df_path, index=False, sheet_name=sheet_name, encoding='latin_1')
+      df.to_excel(df_path, index=False, sheet_name=sheet_name)
     elif df_path.lower().endswith('dgd.isis'):
       pd_save_dgd(df, df_path)
     elif df_path.lower().endswith('isis'):

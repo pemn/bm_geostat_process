@@ -55,7 +55,7 @@ def pd_fivenum_weight(idf, lito, vl_a, weight):
   print("#", *vl_a)
   for v in vl_a:
     df = var_fivenum(idf, lito, weight, v)
-    odf= odf.append(df)
+    odf = pd.concat((odf, df), ignore_index=True, copy=False)
 
   return odf
 # calculate fivenum (min,q2,mean,q3,max) for a block model

@@ -74,11 +74,10 @@ def pv_read(fp):
     mesh = gltf_to_vtk(gltf)
   elif re.search(r'vt(k|p|m)$', fp, re.IGNORECASE):
     mesh = pv.read(fp)
-    if sys.hexversion >= 0x3080000:
-      for name in mesh.field_data:
-        if len(name) == 1:
-          v = mesh.field_data[name]
-          mesh.textures[int(name)] = pv.Texture(np.reshape(v, (v.shape[0],-1,3)))
+    for name in mesh.field_data:
+      if len(name) == 1:
+        v = mesh.field_data[name]
+        mesh.textures[int(name)] = pv.Texture(np.reshape(v, (v.shape[0],-1,3)))
 
   else:
     from _gui import pd_load_dataframe
@@ -124,11 +123,12 @@ def pv_save(meshes, fp, binary=True):
   elif not isinstance(meshes, list):
     pv_save([meshes], fp, binary)
   elif len(meshes):
-    #if sys.hexversion >= 0x3080000:
-    #  for mesh in meshes:
-    #    for k,v in mesh.textures.items():
-    #        img = vtk_texture_to_array(v)
-    #        mesh.field_data[str(k)] = np.reshape(img, (img.shape[0],-1))
+    # TODO: bug here
+    for mesh in meshes:
+      if hasattr(mesh, 'textures'):
+        for k,v in mesh.textures.items():
+          img = vtk_texture_to_array(v)
+          mesh.field_data[str(k)] = np.reshape(img, (img.shape[0],-1))
 
     mesh = meshes[0]
     if len(meshes) > 1:
@@ -347,7 +347,7 @@ def vtk_plot_meshes(meshes, point_labels=False, cmap = None, scalars = None):
       mesh_scalars = None
       if scalars and scalars in mesh.array_names:
           mesh_scalars = scalars
-      if len(mesh.textures):
+      if hasattr(mesh, 'textures') and len(mesh.textures):
         p.add_mesh(mesh, color=None)
       elif mesh.GetDataObjectType() in [2,6]:
         if scalars is not None:
@@ -429,7 +429,8 @@ def vtk_mesh_to_df(mesh, face_size = None, xyz = ['x','y','z'], n0 = 0):
         arr_node = np.arange(mesh.n_points, dtype=np.int_)
         arr_data = [pd.Series(mesh.get_array(name), name=name) for name in mesh.array_names if np.ndim(mesh.get_array(name)) == 1]
 
-    df = pd.concat([pd.DataFrame(points, columns=xyz), pd.Series(arr_n, name='n'), pd.Series(np.add(arr_node, n0), name='node')] + arr_data, 1)
+    df = pd.concat([pd.DataFrame(points, columns=xyz), pd.Series(arr_n, name='n'), pd.Series(np.add(arr_node, n0), name='node')] + arr_data, axis=1)
+    
   return df
 
 def vtk_mesh_info(mesh):
@@ -932,15 +933,13 @@ def ireg_to_json(fp):
   return json.loads(s.replace(' = u', ': NaN').replace('" = ', '": '))
 
 def vtk_ireg_to_texture(mesh, fp):
-  #from sklearn.metrics import pairwise_distances_argmin
   from sklearn.linear_model import LinearRegression
   ireg = ireg_to_json(fp)
-  #df = pd.json_normalize(ireg['points'])
+
   image = np.array([_['image'] for _ in ireg['points']])
   world = np.array([_['world'] for _ in ireg['points']])
   reg = LinearRegression().fit(world, image)
-  #print(reg.predict(world))
-  #nni = pairwise_distances_argmin(mesh.points, world)
+
   mesh.active_t_coords = reg.predict(mesh.points)
   mesh.textures[0] = vtk_path_to_texture(ireg['properties']['image'])
   return mesh

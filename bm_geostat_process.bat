@@ -1,8 +1,9 @@
-:: full open source workflow for generating a geostatistics block model
+:: open source workflow for geostatistics block models
 :: License Apache 2.0
 :: https://github.com/pemn/bm_geostat_process
 @echo off
 setlocal enabledelayedexpansion
+
 :: # graphical interface
 if "%~1" equ "" (
     if exist _gui.py (
@@ -10,7 +11,7 @@ if "%~1" equ "" (
         if defined WINPYDIRBASE call "!WINPYDIRBASE!\scripts\env.bat"
         python -m _gui %0
     ) else (
-        echo usage: %~nx0 lito_mesh#mesh*vtk db_header*csv db_survey*csv db_assay*csv variables#variable:db_assay output_grid*vtk output_reserves*csv
+        echo usage: %~nx0 lito_mesh#mesh*vtk db_header*csv db_survey*csv db_assay*csv variables#variable:db_assay regression_engine%scikit,pykrige,isatis_isapy,vulcan_dbjmest output_grid*vtk output_reserves*csv
         timeout 60
     )
     goto :EOF
@@ -26,16 +27,30 @@ powershell -c "$env0 = -split '%env0%'; get-childitem env: | ? Name -notin $env0
 
 :: ## hardcoded parameters
 set grid_size=50
+set desurvey_runlength=5
 set lito=lito
 set density=density
 set pid=%random%
 set tmp_csv=%~n0.%pid%.csv
 set tmp_vtk=%~n0.%pid%.vtk
 
+:: ## parameter checks
+
+if "%regression_engine%" == "" set regression_engine=scikit
+
+if "%regression_engine%" == "scikit" goto :EOK
+
+goto :ENI
+
+:EOK
+
 :: ## database
 
+python db_assay_runlength.py "%db_assay%" "" "" "" %desurvey_runlength% "%tmp_csv%"
+
+
 :: ### desurvey holes to samples
-python db_desurvey_straight.py "%db_header%" "" "" "" "" "%db_survey%" "" "" "" "%db_assay%" "" "" "%tmp_csv%" 0 0
+python db_desurvey_straight.py "%db_header%" "" "" "" "" "%db_survey%" "" "" "" "%tmp_csv%" "" "" "%tmp_csv%" 0 0
 
 :: ### placeholder for database post process
 
@@ -44,8 +59,7 @@ python db_desurvey_straight.py "%db_header%" "" "" "" "" "%db_survey%" "" "" "" 
 :: ### flag lito solids
 python vtk_flag_regions.py "%grid_size%" "%lito_mesh%" %lito% flag3d "%tmp_vtk%" 0
 
-:: ### multivariate estimation using either krigging or linear regression
-python db_linear_model.py "%tmp_vtk%" "" "%tmp_csv%" "" "" "" "%variables%" rn "" %grid_size% full "%tmp_vtk%" 0
+call :%regression_engine%
 
 :: ## estimation postprocess
 
@@ -75,3 +89,17 @@ for %%v in (%variables%) do set vl=!vl!;%%v,mean,density
 python vtk_reserves.py "%output_grid%" "%vl%" "" "" "" "%output_reserves%" 0
 
 if exist "%output_reserves%" type "%output_reserves%" 
+
+goto :EOF
+
+:SCIKIT
+
+echo SCIKIT engine
+:: ### multivariate estimation using either krigging or linear regression
+python db_linear_model.py "%tmp_vtk%" "" "%tmp_csv%" "" "" "" "%variables%" rn "" %grid_size% full "%tmp_vtk%" 0
+
+goto :EOF
+
+:ENI
+
+powershell -c "Add-Type -AssemblyName PresentationCore,PresentationFramework; [System.Windows.MessageBox]::Show('%regression_engine% regressor not implemented', '%~n0', 0, 48);"
