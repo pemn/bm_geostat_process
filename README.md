@@ -48,6 +48,11 @@ db_header|❎|header of hole database in csv format (x,y,z)
 db_survey|❎|survey of hole database in csv format (azimuth, dip)
 db_assay|❎|assay of hole database in csv format (from, to)
 variables|❎|select which fields will be estimated as grades
+regression_engine||the estimation can be adapted to use different engines
+||scikit|open source scikit linear regression
+||pykrige|open source pykrige native python krigging
+||vulcan_djbmest|proprietary command line krigging from Maptek
+||isatis_isapy|proprietary native python krigging from Geovariances
 output_grid|❎|path to save the block model in vtk format
 output_reserves|❎|path to save the reserves report in csv format
 ## 📓 Notes
