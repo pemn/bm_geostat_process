@@ -41,7 +41,7 @@ def vulcan_pk_krig3d(soft_data, soft_condition, soft_lito, df_hard, hard_lito, x
 
 def vtk_grid_to_df(mesh):
   df0 = pd.DataFrame(mesh.cell_centers().points, columns=['x','y','z'])
-  df1 = pd.DataFrame(np.transpose(mesh.cell_arrays.values()), columns=mesh.cell_arrays)
+  df1 = pd.DataFrame(np.transpose(mesh.cell_data.values()), columns=mesh.cell_data)
   return pd.concat([df0, df1], 1)
 
 def vtk_pk_krig3d(soft_data, soft_condition, soft_lito, df_hard, hard_lito, x, y, z, variables, pk):
@@ -54,7 +54,7 @@ def vtk_pk_krig3d(soft_data, soft_condition, soft_lito, df_hard, hard_lito, x, y
   vl = pk_vl(df_soft, soft_lito, df_hard, hard_lito, x, y, z, variables, pk)
   
   for v in vl:
-    mesh.cell_arrays.set_array(df_soft[v], v)
+    mesh.cell_data.set_array(df_soft[v], v)
   
   mesh.save(soft_data)
 

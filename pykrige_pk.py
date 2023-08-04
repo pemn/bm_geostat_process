@@ -1,5 +1,8 @@
 #python
 
+import numpy as np
+import pandas as pd
+
 class PK(dict):
   ''' pykrige kriging engine '''
   def __init__(self, variogram_model, variogram_parameters = None, anisotropy_scaling = None, anisotropy_angle = None):
