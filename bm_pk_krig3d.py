@@ -2,7 +2,7 @@
 # data krigging using pykrige
 # v1.0 2022/02 paulo.ernesto
 '''
-usage: $0 soft_data*bmf,vtk soft_condition soft_lito:soft_data hard_data*csv hard_condition hard_lito:hard_data x:hard_data y:hard_data z:hard_data variables#variable:hard_data variogram_model%linear,power,gaussian,spherical,exponential,hole-effect variogram_parameters anisotropy_scaling=1,2,1*2 anisotropy_angle=0*0*0,0*0*90,0*90*0,90*0*0
+usage: $0 soft_data*bmf,vtk soft_condition soft_lito:soft_data hard_data*csv hard_condition hard_lito:hard_data variables#variable:hard_data variogram_model%linear,power,gaussian,spherical,exponential,hole-effect variogram_parameters anisotropy_scaling=1,2,1*2 anisotropy_angle=0*0*0,0*0*90,0*90*0,90*0*0
 '''
 import sys, os.path, re
 # import modules from a pyz (zip) file with same name as scripts
@@ -15,7 +15,7 @@ import pandas as pd
 
 from pykrige_pk import PK
 
-def vulcan_pk_krig3d(soft_data, soft_condition, soft_lito, df_hard, hard_lito, x, y, z, variables, pk):
+def vulcan_pk_krig3d(soft_data, soft_condition, soft_lito, df_hard, hard_lito, xyz, variables, pk):
   import vulcan
   xyz_soft = ['xworld', 'yworld', 'zworld']
 
@@ -30,7 +30,7 @@ def vulcan_pk_krig3d(soft_data, soft_condition, soft_lito, df_hard, hard_lito, x
   if hard_lito and soft_lito:
     df_soft[soft_lito] = bm.get_data(soft_lito, bs)
 
-  vl = pk_vl(df_soft, soft_lito, df_hard, hard_lito, x, y, z, variables, pk)
+  vl = pk_vl(df_soft, soft_lito, df_hard, hard_lito, xyz, variables, pk)
 
   for v in vl:
     if not bm.is_field(v):
@@ -39,26 +39,28 @@ def vulcan_pk_krig3d(soft_data, soft_condition, soft_lito, df_hard, hard_lito, x
 
     bm.put_data_double(v, df_soft[v].astype(np.float_), bs)
 
-def vtk_grid_to_df(mesh):
-  df0 = pd.DataFrame(mesh.cell_centers().points, columns=['x','y','z'])
+def vtk_grid_to_df(mesh, xyz = ['x','y','z']):
+  ''' convert a vtk grid to a pandas dataframe '''
+  df0 = pd.DataFrame(mesh.cell_centers().points, columns=xyz)
+  # we must use a expensive dataframe instead of a numpy array because dtypes may vary
   df1 = pd.DataFrame(np.transpose(mesh.cell_data.values()), columns=mesh.cell_data)
-  return pd.concat([df0, df1], 1)
+  return pd.concat([df0, df1], axis=1)
 
-def vtk_pk_krig3d(soft_data, soft_condition, soft_lito, df_hard, hard_lito, x, y, z, variables, pk):
+def vtk_pk_krig3d(soft_data, soft_condition, soft_lito, df_hard, hard_lito, xyz, variables, pk):
   import pyvista as pv
   mesh = pv.read(soft_data)
-  df_soft = vtk_grid_to_df(mesh)
+  df_soft = vtk_grid_to_df(mesh, xyz)
   if soft_condition:
     df_soft.query(soft_condition, True)
 
-  vl = pk_vl(df_soft, soft_lito, df_hard, hard_lito, x, y, z, variables, pk)
+  vl = pk_vl(df_soft, soft_lito, df_hard, hard_lito, xyz, variables, pk)
   
   for v in vl:
     mesh.cell_data.set_array(df_soft[v], v)
   
   mesh.save(soft_data)
 
-def pk_vl(df_soft, soft_lito, df_hard, hard_lito, x, y, z, variables, pk):
+def pk_vl(df_soft, soft_lito, df_hard, hard_lito, xyz, variables, pk):
   vl = []
   for v in variables:
     if v in df_hard:
@@ -96,7 +98,7 @@ def pk_vl(df_soft, soft_lito, df_hard, hard_lito, x, y, z, variables, pk):
       df_hard_lito = df_hard.loc[bi]
 
     for v in vl:
-      samples = df_hard_lito[[x, y, z, v]].dropna().values
+      samples = df_hard_lito[xyz + [v]].dropna().values
 
       if len(samples) == 0:
         print("no soft points for %s = %s, %s" % (hard_lito,ri,v))
@@ -115,18 +117,21 @@ def pk_vl(df_soft, soft_lito, df_hard, hard_lito, x, y, z, variables, pk):
   
   return vl
 
-def bm_pk_krig3d(soft_data, soft_condition, soft_lito, hard_data, hard_condition, hard_lito, x, y, z, variables, variogram_model, variogram_parameters, anisotropy_scaling, anisotropy_angle):
+def bm_pk_krig3d(soft_data, soft_condition, soft_lito, hard_data, hard_condition, hard_lito, variables, variogram_model, variogram_parameters, anisotropy_scaling, anisotropy_angle):
   pk = PK(variogram_model, variogram_parameters, anisotropy_scaling, anisotropy_angle)
   variables = commalist().parse(variables).split()
 
+
   log("# bm_pk_krig3d started")
+
   df_hard = pd_load_dataframe(hard_data, hard_condition)
+  xyz = pd_detect_xyz(df_hard)
 
   if soft_data.lower().endswith('bmf'):
-    vulcan_pk_krig3d(soft_data, soft_condition, soft_lito, df_hard, hard_lito, x, y, z, variables, pk)
+    vulcan_pk_krig3d(soft_data, soft_condition, soft_lito, df_hard, hard_lito, xyz, variables, pk)
   
   if soft_data.lower().endswith('vtk'):
-    vtk_pk_krig3d(soft_data, soft_condition, soft_lito, df_hard, hard_lito, x, y, z, variables, pk)
+    vtk_pk_krig3d(soft_data, soft_condition, soft_lito, df_hard, hard_lito, xyz, variables, pk)
 
 
 main = bm_pk_krig3d
