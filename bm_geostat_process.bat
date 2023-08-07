@@ -94,9 +94,14 @@ goto :EOF
 
 :SCIKIT
 
-echo SCIKIT engine
 :: ### multivariate estimation using either krigging or linear regression
 python db_linear_model.py "%tmp_vtk%" "" "%tmp_csv%" "" "" "" "%variables%" rn "" %grid_size% full "%tmp_vtk%" 0
+
+goto :EOF
+
+:PYKRIGE
+
+python bm_pk_krig3d.py %tmp_vtk% "" "" %tmp_csv% "" "" x y z "%variables%" gaussian "" "" ""
 
 goto :EOF
 
