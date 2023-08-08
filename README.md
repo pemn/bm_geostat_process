@@ -54,13 +54,16 @@ regression_engine||the estimation can be adapted to use different engines
 ||isatis_isapy|proprietary native python krigging from Geovariances
 ||vulcan_djbmest|proprietary command line krigging from Maptek
 output_grid|❎|path to save the block model in vtk format
-output_reserves|❎|path to save the reserves report in csv format
+output_reserves|☑️|path to save the reserves report in csv format
+output_heatmap|☑️|path to save the a heatmap chart of the result in pdf format
 ## 📓 Notes
 ## 📚 Examples
 ### output 3d grid
 ![screenshot2](https://github.com/pemn/assets/blob/main/bm_geostat_process2.png?raw=true)
 ### output reserves report
 ![screenshot3](https://github.com/pemn/assets/blob/main/bm_geostat_process3.png?raw=true)
+### output heatmap chart
+![screenshot4](https://github.com/pemn/assets/blob/main/bm_geostat_process4.png?raw=true)
 ## 🙋 Support
 Any question or problem contact:
  - paulo.ernesto
