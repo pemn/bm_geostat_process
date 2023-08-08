@@ -63,8 +63,8 @@ output_heatmap|☑️|path to save the a heatmap chart of the result in pdf form
 ### output reserves report
 ![screenshot3](https://github.com/pemn/assets/blob/main/bm_geostat_process3.png?raw=true)
 ### output heatmap chart
-![screenshot4](https://github.com/pemn/assets/blob/main/bm_geostat_process4.png?raw=true)
-![screenshot4](https://github.com/pemn/assets/blob/main/bm_geostat_process5.png?raw=true)
+![screenshot4](https://github.com/pemn/assets/blob/main/bm_geostat_process4.png?raw=true)  
+![screenshot5](https://github.com/pemn/assets/blob/main/bm_geostat_process5.png?raw=true)
 ## 🙋 Support
 Any question or problem contact:
  - paulo.ernesto
