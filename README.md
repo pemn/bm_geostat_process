@@ -65,6 +65,22 @@ output_heatmap|☑️|path to save the a heatmap chart of the result in pdf form
 ### output heatmap chart
 ![screenshot4](https://github.com/pemn/assets/blob/main/bm_geostat_process4.png?raw=true)  
 ![screenshot5](https://github.com/pemn/assets/blob/main/bm_geostat_process5.png?raw=true)
+## 🧰 Tools
+ - bm_geostat_process.bat: main script
+ - bm_fivenum_weight.py: descriptive statistics
+ - bm_pk_krig3d.py: krigging regressor
+ - db_pk_krig3d.py: helper script for kirring regressor
+ - db_assay_runlength.py: helper script for sample compositing
+ - db_create_from_to.py: helper script for sample composition
+ - db_desurvey_straight.py: sample compositing from collar,survey,assay
+ - db_info.py: reports generic info about a structured data file
+ - db_linear_model.py: linear regressor
+ - db_pandas_evaluate.py: run generic calculations on structured data
+ - db_voxel_view.py: create heatmap chart from 3d grids
+ - vtk_evaluate_array.py: run generic calculations on vtk format files
+ - vtk_flag_regions.py: create or flag a grid using solids
+ - vtk_mine.py: reserve depletion calculation
+ - vtk_reserves.py: reserves report
 ## 🙋 Support
 Any question or problem contact:
  - paulo.ernesto
