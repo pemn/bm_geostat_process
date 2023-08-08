@@ -79,18 +79,24 @@ def pd_voxel_view(k3d, samples = None, title = None, pdf = None, op = None):
   if title:
     fig.suptitle(title)
   plt.subplot(231)
-  plt.axis('off')
+  plt.grid(True)
   plt.gca().matshow(f(k3d, 2).T, cmap=cmap, origin='lower')
+  plt.gca().set_xticklabels([])
+  plt.gca().set_yticklabels([])
   plt.gca().set_title('z')
 
   plt.subplot(232)
-  plt.axis('off')
+  plt.grid(True)
   plt.gca().matshow(f(k3d, 0).T, cmap=cmap, origin='lower')
+  plt.gca().set_xticklabels([])
+  plt.gca().set_yticklabels([])
   plt.gca().set_title('x')
   
   plt.subplot(233)
-  plt.axis('off')
+  plt.grid(True)
   plt.gca().matshow(f(k3d, 1).T, cmap=cmap, origin='lower')
+  plt.gca().set_xticklabels([])
+  plt.gca().set_yticklabels([])
   plt.gca().set_title('y')
 
   plt.subplot(234)
@@ -138,7 +144,7 @@ def db_voxel_view(voxels, fields, samples, output = None):
       if v in mesh.array_names and mesh.GetDataObjectType() in [2,6]:
         # transform flat array into ijk 3d array
         a3d.append(np.reshape(mesh.get_array(v), np.subtract(np.flip(mesh.dimensions), 1)))
-  else:
+  elif voxels:
     df_soft = pd_load_dataframe(voxels)
     for field in vl:
       a3d.append(df2a3d(df_soft, field))

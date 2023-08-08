@@ -11,7 +11,7 @@ if "%~1" equ "" (
         if defined WINPYDIRBASE call "!WINPYDIRBASE!\scripts\env.bat"
         python -m _gui %0
     ) else (
-        echo usage: %~nx0 lito_mesh#mesh*vtk db_header*csv db_survey*csv db_assay*csv variables#variable:db_assay regression_engine%scikit,pykrige,isatis_isapy,vulcan_dbjmest output_grid*vtk output_reserves*csv
+        echo usage: %~nx0 lito_mesh#mesh*vtk db_header*csv db_survey*csv db_assay*csv variables#variable:db_assay regression_engine%scikit,pykrige,isatis_isapy,vulcan_dbjmest output_grid*vtk output_reserves*csv output_heatmap*pdf
         timeout 60
     )
     goto :EOF
@@ -69,9 +69,7 @@ python vtk_evaluate_array.py "%tmp_vtk%" "lito = np.vectorize(lambda _: _.rparti
 :: ### calculate density from lito
 python vtk_evaluate_array.py "%tmp_vtk%" "%density% = np.choose(((lito == 'AA') * 1) + ((lito == 'BB') * 2) + ((lito == 'CC') * 3) + ((lito == 'DD') * 4), (np.nan, 1, 2, 3, 4))"
 
-:: ### cleanup
 move /y "%tmp_vtk%" "%output_grid%"
-if exist %tmp_csv% del %tmp_csv%
 
 :: ## checks and statistics
 
@@ -83,12 +81,28 @@ python db_info.py "%output_grid%" 0
 :: ### variable statistics
 python bm_fivenum_weight.py "%output_grid%" "" %lito% "" "%density%;%variables%" "" 0
 
+if "%output_reserves%" neq "" call :RESERVES
+if "%output_heatmap%" neq "" call :HEATMAP
+
+:: ### cleanup
+if exist "%tmp_csv%" del "%tmp_csv%"
+
+goto :EOF
+
+:RESERVES
+
 :: ### reserves estimation
 set vl=%lito%;volume,sum;volume=mass,sum,density
 for %%v in (%variables%) do set vl=!vl!;%%v,mean,density
 python vtk_reserves.py "%output_grid%" "%vl%" "" "" "" "%output_reserves%" 0
 
 if exist "%output_reserves%" type "%output_reserves%" 
+
+goto :EOF
+
+:HEATMAP
+
+python db_voxel_view.py "%output_grid%" "%lito%;%variables%" "%tmp_csv%" "%output_heatmap%"
 
 goto :EOF
 
@@ -101,7 +115,7 @@ goto :EOF
 
 :PYKRIGE
 
-python bm_pk_krig3d.py %tmp_vtk% "" "" %tmp_csv% "" "" x y z "%variables%" gaussian "" "" ""
+python bm_pk_krig3d.py "%tmp_vtk%" "" "" "%tmp_csv%" "" "" "%variables%" gaussian "" "" ""
 
 goto :EOF
 
