@@ -4,7 +4,8 @@ this script integrates multiple generic tools and modules in a single graphical 
 the target audience is academic use by geostatistic professionals or industrial proof of concepts projects  
 its not suited for production use  
 ## 📸 Screenshot
-![screenshot1](https://github.com/pemn/assets/blob/main/bm_geostat_process1.png?raw=true)
+
+
 ## 🧩 Implementation
 The main implementation is a windows batch script that calls secondary processes for each step.  
 It can be adapted to run in other platforms since the provided tools inherit the portability of Python.  
@@ -58,13 +59,7 @@ output_reserves|☑️|path to save the reserves report in csv format
 output_heatmap|☑️|path to save the a heatmap chart of the result in pdf format
 ## 📓 Notes
 ## 📚 Examples
-### output 3d grid
-![screenshot2](https://github.com/pemn/assets/blob/main/bm_geostat_process2.png?raw=true)
-### output reserves report
-![screenshot3](https://github.com/pemn/assets/blob/main/bm_geostat_process3.png?raw=true)
-### output heatmap chart
-![screenshot4](https://github.com/pemn/assets/blob/main/bm_geostat_process4.png?raw=true)  
-![screenshot5](https://github.com/pemn/assets/blob/main/bm_geostat_process5.png?raw=true)
+
 ## 🧰 Tools
  - bm_geostat_process.bat: main script
  - bm_fivenum_weight.py: descriptive statistics
